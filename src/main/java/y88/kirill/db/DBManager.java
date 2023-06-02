@@ -32,6 +32,7 @@ public class DBManager {
     public  void connect()  {
         try {
             connection = DriverManager.getConnection(jdbcUrl, user,password);
+            connection.setTransactionIsolation(Connection.TRANSACTION_REPEATABLE_READ);
         } catch (SQLException e) {
             e.printStackTrace();
         }
