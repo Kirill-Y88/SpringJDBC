@@ -2,16 +2,16 @@ package y88.kirill.dto;
 
 import java.util.List;
 
-public class Position {
+public class PositionD {
 
     private Long id;
     private String title;
-    private List<Person> persons;
+    private List<PersonD> personDS;
 
-    public Position() {
+    public PositionD() {
     }
 
-    public Position(Long id, String title) {
+    public PositionD(Long id, String title) {
         this.id = id;
         this.title = title;
     }
@@ -32,11 +32,11 @@ public class Position {
         this.title = title;
     }
 
-    public List<Person> getPersons() {
-        return persons;
+    public List<PersonD> getPersons() {
+        return personDS;
     }
 
-    public void setPersons(List<Person> persons) {
-        this.persons = persons;
+    public void setPersons(List<PersonD> personDS) {
+        this.personDS = personDS;
     }
 }

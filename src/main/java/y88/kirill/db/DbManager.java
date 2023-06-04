@@ -8,7 +8,7 @@ import javax.annotation.PreDestroy;
 import java.sql.*;
 
 @Component
-public class DBManager {
+public class DbManager {
     private  String jdbcUrl;
     private  String user;
     private  String password;

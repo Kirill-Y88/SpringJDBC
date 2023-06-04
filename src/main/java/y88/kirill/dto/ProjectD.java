@@ -2,24 +2,24 @@ package y88.kirill.dto;
 
 import java.util.List;
 
-public class Project {
+public class ProjectD {
 
     private Long id;
     private String title;
-    private List<Person> persons;
+    private List<PersonD> personDS;
 
-    public Project(Long id, String title) {
+    public ProjectD(Long id, String title) {
         this.id = id;
         this.title = title;
     }
 
-    public Project(Long id, String title, List<Person> persons) {
+    public ProjectD(Long id, String title, List<PersonD> personDS) {
         this.id = id;
         this.title = title;
-        this.persons = persons;
+        this.personDS = personDS;
     }
 
-    public Project() {
+    public ProjectD() {
     }
 
     public Long getId() {
@@ -39,11 +39,11 @@ public class Project {
     }
 
 
-    public List<Person> getPersons() {
-        return persons;
+    public List<PersonD> getPersons() {
+        return personDS;
     }
 
-    public void setPersons(List<Person> persons) {
-        this.persons = persons;
+    public void setPersons(List<PersonD> personDS) {
+        this.personDS = personDS;
     }
 }

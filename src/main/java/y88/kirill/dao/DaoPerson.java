@@ -2,9 +2,8 @@ package y88.kirill.dao;
 
 
 import org.springframework.stereotype.Component;
-import y88.kirill.db.DBManager;
-import y88.kirill.dto.Person;
-import y88.kirill.dto.Position;
+import y88.kirill.db.DbManager;
+import y88.kirill.dto.PersonD;
 
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
@@ -17,37 +16,37 @@ import java.util.List;
 @Component
 public class DaoPerson {
 
-    private final DBManager dbManager;
+    private final DbManager dbManager;
     private final DaoPosition daoPosition;
     private Connection connection;
 
-    public DaoPerson(DBManager dbManager, DaoPosition daoPosition) {
+    public DaoPerson(DbManager dbManager, DaoPosition daoPosition) {
         this.dbManager = dbManager;
         this.daoPosition = daoPosition;
     }
 
-    public Person getPersonByName(String name){
-        Person person = null;
+    public PersonD getPersonByName(String name){
+        PersonD personD = null;
         try {
             PreparedStatement ps = connection.prepareStatement("select * from persons where name = ?");
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
             rs.next();
-            person = new Person(rs.getLong(1),
+            personD = new PersonD(rs.getLong(1),
                     rs.getString(2),
                     daoPosition.getPositionById(rs.getLong(3)));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return person;
+        return personD;
 
 
     }
 
 
-    public List<Person> getAllByProjectId(Long id){
-        List<Person> persons = new ArrayList<>();
+    public List<PersonD> getAllByProjectId(Long id){
+        List<PersonD> personDS = new ArrayList<>();
 
         try {
             PreparedStatement ps2 = connection.prepareStatement("select * from persons pe \n" +
@@ -57,7 +56,7 @@ public class DaoPerson {
             ResultSet rs2 = ps2.executeQuery();
 
             while (rs2.next()){
-                persons.add(new Person(rs2.getLong(1),
+                personDS.add(new PersonD(rs2.getLong(1),
                         rs2.getString(2),
                         daoPosition.getPositionById(rs2.getLong(3))));
             }
@@ -66,11 +65,11 @@ public class DaoPerson {
             e.printStackTrace();
         }
 
-        return persons;
+        return personDS;
     }
 
-    public List<Person> getAllByProjectTitle(String title){
-        List<Person> persons = new ArrayList<>();
+    public List<PersonD> getAllByProjectTitle(String title){
+        List<PersonD> personDS = new ArrayList<>();
 
         try {
             PreparedStatement ps2 = connection.prepareStatement("select * from persons pe \n" +
@@ -80,7 +79,7 @@ public class DaoPerson {
             ResultSet rs2 = ps2.executeQuery();
 
             while (rs2.next()){
-                persons.add(new Person(rs2.getLong(1),
+                personDS.add(new PersonD(rs2.getLong(1),
                         rs2.getString(2),
                         daoPosition.getPositionById(rs2.getLong(3))));
             }
@@ -89,11 +88,11 @@ public class DaoPerson {
             e.printStackTrace();
         }
 
-        return persons;
+        return personDS;
     }
 
-    public List<Person> getAllByPositionTitle(String title){
-        List<Person> persons = new ArrayList<>();
+    public List<PersonD> getAllByPositionTitle(String title){
+        List<PersonD> personDS = new ArrayList<>();
 
         try {
             PreparedStatement ps2 = connection.prepareStatement("select * from persons pe \n" +
@@ -103,7 +102,7 @@ public class DaoPerson {
             ResultSet rs2 = ps2.executeQuery();
 
             while (rs2.next()){
-                persons.add(new Person(rs2.getLong(1),
+                personDS.add(new PersonD(rs2.getLong(1),
                         rs2.getString(2),
                         daoPosition.getPositionById(rs2.getLong(3))));
             }
@@ -112,19 +111,19 @@ public class DaoPerson {
             e.printStackTrace();
         }
 
-        return persons;
+        return personDS;
     }
 
 
-    public List<Person> getAllPerson(){
-        List<Person> persons = new ArrayList<>();
+    public List<PersonD> getAllPerson(){
+        List<PersonD> personDS = new ArrayList<>();
 
         try  {
             PreparedStatement ps = connection.prepareStatement("select * from persons");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                persons.add(new Person(rs.getLong(1),
+                personDS.add(new PersonD(rs.getLong(1),
                         rs.getString(2),
                         daoPosition.getPositionById(rs.getLong(3))));
             }
@@ -132,7 +131,7 @@ public class DaoPerson {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return persons;
+        return personDS;
     }
 
 

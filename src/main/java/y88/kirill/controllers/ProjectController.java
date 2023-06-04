@@ -1,46 +1,43 @@
 package y88.kirill.controllers;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import y88.kirill.dao.DaoProject;
-import y88.kirill.db.DBManager;
-import y88.kirill.dto.Project;
+import y88.kirill.db.DbManager;
+import y88.kirill.dto.ProjectD;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
 
-    private final DBManager dbManager;
+    private final DbManager dbManager;
     private final DaoProject daoProject;
     private Connection connection;
 
-    public ProjectController(DBManager dbManager, DaoProject daoProject) {
+    public ProjectController(DbManager dbManager, DaoProject daoProject) {
         this.dbManager = dbManager;
         this.daoProject = daoProject;
     }
 
 
     @GetMapping("/{id}")
-    public Project getProjectById(@PathVariable Long id){
+    public ProjectD getProjectById(@PathVariable Long id){
 
         return daoProject.getProjectById(id);
     }
 
     @GetMapping("/title")
-    public Project getProjectByTitle(@RequestParam String title){
+    public ProjectD getProjectByTitle(@RequestParam String title){
 
         return daoProject.getProjectByTitle(title);
     }
 
     @GetMapping("/project-by-person")
-    public List<Project> getProjectByPerson(@RequestParam String name){
+    public List<ProjectD> getProjectByPerson(@RequestParam String name){
         return daoProject.getProjectByPersonName(name);
     }
 
@@ -101,7 +98,7 @@ public class ProjectController {
 
 
     @GetMapping("/all")
-    public List<Project> getAllProject(){
+    public List<ProjectD> getAllProject(){
 
         return daoProject.getAllProject();
 

@@ -2,10 +2,8 @@ package y88.kirill.dao;
 
 
 import org.springframework.stereotype.Component;
-import y88.kirill.db.DBManager;
-import y88.kirill.dto.Person;
-import y88.kirill.dto.Position;
-import y88.kirill.dto.Project;
+import y88.kirill.db.DbManager;
+import y88.kirill.dto.PositionD;
 
 import javax.annotation.PostConstruct;
 import java.sql.Connection;
@@ -18,60 +16,60 @@ import java.util.List;
 @Component
 public class DaoPosition {
 
-    private final DBManager dbManager;
+    private final DbManager dbManager;
     private Connection connection;
 
 
-    public DaoPosition(DBManager dbManager) {
+    public DaoPosition(DbManager dbManager) {
         this.dbManager = dbManager;
     }
 
-    public Position getPositionById(Long id){
-        Position position = null;
+    public PositionD getPositionById(Long id){
+        PositionD positionD = null;
         try {
             PreparedStatement ps = connection.prepareStatement("select * from positions where id = ?");
             ps.setLong(1, id);
             ResultSet rs = ps.executeQuery();
             rs.next();
-            position = new Position(rs.getLong(1), rs.getString(2));
+            positionD = new PositionD(rs.getLong(1), rs.getString(2));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return position;
+        return positionD;
     }
 
-    public Position getPositionByTitle(String title){
-        Position position = null;
+    public PositionD getPositionByTitle(String title){
+        PositionD positionD = null;
         try {
             PreparedStatement ps = connection.prepareStatement("select * from positions where title = ?");
             ps.setString(1, title);
             ResultSet rs = ps.executeQuery();
             rs.next();
-            position = new Position(rs.getLong(1), rs.getString(2));
+            positionD = new PositionD(rs.getLong(1), rs.getString(2));
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return position;
+        return positionD;
     }
 
 
-    public List<Position> getAllPosition(){
-        List<Position> positions = new ArrayList<>();
+    public List<PositionD> getAllPosition(){
+        List<PositionD> positionDS = new ArrayList<>();
 
         try  {
             PreparedStatement ps = connection.prepareStatement("select * from positions");
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()){
-                positions.add(new Position(rs.getLong(1), rs.getString(2) ));
+                positionDS.add(new PositionD(rs.getLong(1), rs.getString(2) ));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return positions;
+        return positionDS;
     }
 
     public boolean createNewPosition(String newPositionName){

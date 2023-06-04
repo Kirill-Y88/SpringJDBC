@@ -1,12 +1,10 @@
 package y88.kirill.controllers;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import y88.kirill.dao.DaoPerson;
 import y88.kirill.dao.DaoPosition;
-import y88.kirill.dto.Position;
-import y88.kirill.dto.Project;
+import y88.kirill.dto.PositionD;
 
 import java.util.List;
 
@@ -24,17 +22,17 @@ public class PositionController {
     }
 
     @GetMapping("/{id}")
-    public Position getPositionById(@PathVariable Long id){
+    public PositionD getPositionById(@PathVariable Long id){
         return daoPosition.getPositionById(id);
     }
 
     @GetMapping("/by-title")
-    public Position getPositionByTitle(@RequestParam String title){
+    public PositionD getPositionByTitle(@RequestParam String title){
         return daoPosition.getPositionByTitle(title);
     }
 
     @GetMapping("/all")
-    public List<Position> getAllPosition(){
+    public List<PositionD> getAllPosition(){
         return daoPosition.getAllPosition();
     }
 

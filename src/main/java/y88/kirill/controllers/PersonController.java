@@ -3,8 +3,7 @@ package y88.kirill.controllers;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import y88.kirill.dao.DaoPerson;
-import y88.kirill.dto.Person;
-import y88.kirill.dto.Position;
+import y88.kirill.dto.PersonD;
 
 import java.util.List;
 
@@ -25,23 +24,23 @@ public class PersonController {
 
 
     @GetMapping("/all")
-    public List<Person> getAllPerson(){
+    public List<PersonD> getAllPerson(){
         return daoPerson.getAllPerson();
     }
 
 
     @GetMapping("/by-name")
-    public Person getPersonByName(@RequestParam String name){
+    public PersonD getPersonByName(@RequestParam String name){
         return daoPerson.getPersonByName(name);
     }
 
     @GetMapping("/by-project-title")
-    public List<Person> getPersonByProjectTitle(@RequestParam String title){
+    public List<PersonD> getPersonByProjectTitle(@RequestParam String title){
         return daoPerson.getAllByProjectTitle(title);
     }
 
     @GetMapping("/by-position-title")
-    public List<Person> getPersonByPositionTitle(@RequestParam String title){
+    public List<PersonD> getPersonByPositionTitle(@RequestParam String title){
         return daoPerson.getAllByPositionTitle(title);
     }
 
