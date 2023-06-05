@@ -3,7 +3,6 @@ package y88.kirill.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import y88.kirill.dao.DaoPerson;
 import y88.kirill.dto.PersonDto;
 import y88.kirill.exceptions.ExceptionInfo;
 import y88.kirill.services.PersonService;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PersonController {
 
-    private final DaoPerson daoPerson;
     private final PersonService personService;
 
 
