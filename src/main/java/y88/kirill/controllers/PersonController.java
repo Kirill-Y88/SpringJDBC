@@ -1,93 +1,99 @@
 package y88.kirill.controllers;
 
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import y88.kirill.dao.DaoPerson;
-import y88.kirill.dto.PersonD;
+import y88.kirill.dto.PersonDto;
+import y88.kirill.exceptions.ExceptionInfo;
+import y88.kirill.services.PersonService;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/person")
+@RequiredArgsConstructor
 public class PersonController {
 
     private final DaoPerson daoPerson;
-
-    public PersonController(DaoPerson daoPerson) {
-        this.daoPerson = daoPerson;
-    }
-
-    @GetMapping
-    public String getHello(){
-        return "hello";
-    }
+    private final PersonService personService;
 
 
     @GetMapping("/all")
-    public List<PersonD> getAllPerson(){
-        return daoPerson.getAllPerson();
+    public List<PersonDto> getAllPerson() {
+        return personService.getAll();
     }
 
+    @GetMapping("/by-id")
+    public ResponseEntity<?> getPersonById(@RequestParam Long id) {
+        try {
+            return ResponseEntity.ok(personService.getById(id));
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
+    }
 
     @GetMapping("/by-name")
-    public PersonD getPersonByName(@RequestParam String name){
-        return daoPerson.getPersonByName(name);
+    public ResponseEntity<?> getPersonByName(@RequestParam String name) {
+        try {
+            return ResponseEntity.ok(personService.getByName(name));
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
     }
-
-    @GetMapping("/by-project-title")
-    public List<PersonD> getPersonByProjectTitle(@RequestParam String title){
-        return daoPerson.getAllByProjectTitle(title);
-    }
-
-    @GetMapping("/by-position-title")
-    public List<PersonD> getPersonByPositionTitle(@RequestParam String title){
-        return daoPerson.getAllByPositionTitle(title);
-    }
-
 
     @PostMapping("/create")
-    public HttpStatus createPerson(@RequestParam String newPersonName,
-                                   @RequestParam Long idPosition){
-        boolean result = daoPerson.createNewPerson(newPersonName,idPosition);
-        if(result){
-            return HttpStatus.CREATED;
-        }else {
-            return HttpStatus.BAD_GATEWAY;
+    public ResponseEntity<?> createPerson(@RequestParam String name,
+                                          @RequestParam Long idPosition) {
+        try {
+            personService.create(name, idPosition);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-    @PostMapping("/updateName")
-    public HttpStatus updatePersonName(@RequestParam String oldName,
-                                     @RequestParam String newName){
-        boolean result = daoPerson.updatePersonName(oldName, newName);
-        if(result){
-            return  HttpStatus.valueOf(200);
-        }else {
-            return  HttpStatus.I_AM_A_TEAPOT;
+    @PostMapping("/update-name")
+    public ResponseEntity<?> updatePersonName(@RequestParam String oldName,
+                                              @RequestParam String newName) {
+        try {
+            personService.updateName(oldName, newName);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-    @PostMapping("/updatePosition")
-    public HttpStatus updatePersonPosition(@RequestParam String name,
-                                       @RequestParam String position){
-        boolean result = daoPerson.updatePersonPosition(name, position);
-        if(result){
-            return  HttpStatus.valueOf(200);
-        }else {
-            return  HttpStatus.I_AM_A_TEAPOT;
+    @PostMapping("/update-position")
+    public ResponseEntity<?> updatePersonPosition(@RequestParam String name,
+                                                  @RequestParam String position) {
+        try {
+            personService.updatePosition(name, position);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-    @DeleteMapping("/delete")
-    public HttpStatus deletePerson(String name){
-        boolean result = daoPerson.deletePerson(name);
-        if(result){
-            return HttpStatus.valueOf(200);
-        }else {
-            return HttpStatus.I_AM_A_TEAPOT;
+    @DeleteMapping("/delete-by-name")
+    public ResponseEntity<?> deleteByName(String name) {
+        try {
+            personService.deleteByName(name);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-
+    @DeleteMapping("/delete-by-id")
+    public ResponseEntity<?> deleteByPerson(Long id) {
+        try {
+            personService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
+    }
 
 }

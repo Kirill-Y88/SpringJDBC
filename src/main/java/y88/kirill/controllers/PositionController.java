@@ -1,71 +1,84 @@
 package y88.kirill.controllers;
 
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import y88.kirill.dao.DaoPerson;
-import y88.kirill.dao.DaoPosition;
-import y88.kirill.dto.PositionD;
+import y88.kirill.dto.PositionDto;
+import y88.kirill.exceptions.ExceptionInfo;
+import y88.kirill.services.PositionService;
 
 import java.util.List;
 
 
 @RestController
 @RequestMapping("/position")
+@RequiredArgsConstructor
 public class PositionController {
 
-    private final DaoPosition daoPosition;
-    private final DaoPerson daoPerson;
+    private final PositionService positionService;
 
-    public PositionController(DaoPosition daoPosition, DaoPerson daoPerson) {
-        this.daoPosition = daoPosition;
-        this.daoPerson = daoPerson;
+    @GetMapping("/all")
+    public List<PositionDto> getAllPosition() {
+        return positionService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public PositionD getPositionById(@PathVariable Long id){
-        return daoPosition.getPositionById(id);
+    @GetMapping("/by-id")
+    public ResponseEntity<?> getPositionById(@RequestParam Long id) {
+        try {
+            return ResponseEntity.ok(positionService.getById(id));
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
     }
 
     @GetMapping("/by-title")
-    public PositionD getPositionByTitle(@RequestParam String title){
-        return daoPosition.getPositionByTitle(title);
-    }
-
-    @GetMapping("/all")
-    public List<PositionD> getAllPosition(){
-        return daoPosition.getAllPosition();
+    public ResponseEntity<?> getPositionByTitle(@RequestParam String title) {
+        try {
+            return ResponseEntity.ok(positionService.getByTitle(title));
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
     }
 
     @PostMapping("/create")
-    public HttpStatus createPosition(@RequestParam String newPositionName){
-        boolean result = daoPosition.createNewPosition(newPositionName);
-        if(result){
-            return HttpStatus.CREATED;
-        }else {
-            return HttpStatus.BAD_GATEWAY;
+    public ResponseEntity<?> createPosition(@RequestParam String title) {
+        try {
+            positionService.create(title);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
     @PostMapping("/update")
-    public HttpStatus updatePosition(@RequestParam String oldTitle,
-                                            @RequestParam String newTitle){
-        boolean result = daoPosition.updatePosition(oldTitle, newTitle);
-        if(result){
-            return  HttpStatus.valueOf(200);
-        }else {
-            return  HttpStatus.I_AM_A_TEAPOT;
+    public ResponseEntity<?> updatePositionTitle(@RequestParam String oldTitle,
+                                              @RequestParam String newTitle) {
+        try {
+            positionService.updateTitle(oldTitle, newTitle);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-    @DeleteMapping("/delete")
-    public HttpStatus deletePosition(String title){
-        boolean result = daoPosition.deletePosition(title);
-        if(result){
-            return HttpStatus.valueOf(200);
-        }else {
-            return HttpStatus.I_AM_A_TEAPOT;
+    @DeleteMapping("/delete-by-title")
+    public ResponseEntity<?> deleteByTitle(String title) {
+        try {
+            positionService.deleteByTitle(title);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
+    @DeleteMapping("/delete-by-id")
+    public ResponseEntity<?> deleteById(Long id) {
+        try {
+            positionService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
+    }
 
 }

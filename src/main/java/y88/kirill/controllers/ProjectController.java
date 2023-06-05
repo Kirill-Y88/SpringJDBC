@@ -1,116 +1,106 @@
 package y88.kirill.controllers;
 
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import y88.kirill.dao.DaoProject;
-import y88.kirill.db.DbManager;
-import y88.kirill.dto.ProjectD;
+import y88.kirill.dto.ProjectDto;
+import y88.kirill.exceptions.ExceptionInfo;
+import y88.kirill.services.ProjectService;
 
-import javax.annotation.PostConstruct;
-import java.sql.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/project")
+@RequiredArgsConstructor
 public class ProjectController {
 
-    private final DbManager dbManager;
-    private final DaoProject daoProject;
-    private Connection connection;
+    private final ProjectService projectService;
 
-    public ProjectController(DbManager dbManager, DaoProject daoProject) {
-        this.dbManager = dbManager;
-        this.daoProject = daoProject;
+    @GetMapping("/all")
+    public List<ProjectDto> getAllPosition() {
+        return projectService.getAll();
     }
 
-
-    @GetMapping("/{id}")
-    public ProjectD getProjectById(@PathVariable Long id){
-
-        return daoProject.getProjectById(id);
+    @GetMapping("/by-id")
+    public ResponseEntity<?> getProjectById(@RequestParam Long id) {
+        try {
+            return ResponseEntity.ok(projectService.getById(id));
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
     }
 
-    @GetMapping("/title")
-    public ProjectD getProjectByTitle(@RequestParam String title){
-
-        return daoProject.getProjectByTitle(title);
-    }
-
-    @GetMapping("/project-by-person")
-    public List<ProjectD> getProjectByPerson(@RequestParam String name){
-        return daoProject.getProjectByPersonName(name);
+    @GetMapping("/by-title")
+    public ResponseEntity<?> getProjectByTitle(@RequestParam String title) {
+        try {
+            return ResponseEntity.ok(projectService.getByTitle(title));
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
     }
 
     @PostMapping("/create")
-    public HttpStatus createProject(@RequestParam String title){
-        boolean result = daoProject.createProject(title);
-        if(result){
-            return HttpStatus.CREATED;
-        }else {
-            return HttpStatus.BAD_GATEWAY;
+    public ResponseEntity<?> create(@RequestParam String title) {
+        try {
+            projectService.create(title);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
     @PostMapping("/update")
-    public HttpStatus updateProject(@RequestParam String oldTitle,
-                                    @RequestParam String  newTitle){
-        boolean result = daoProject.updateProject(oldTitle,newTitle);
-        if(result){
-            return HttpStatus.CREATED;
-        }else {
-            return HttpStatus.BAD_GATEWAY;
+    public ResponseEntity<?> updateTitle(@RequestParam String oldTitle,
+                                         @RequestParam String newTitle) {
+        try {
+            projectService.updateTitle(oldTitle, newTitle);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-    @PostMapping("/add-person-in-project")
-    public HttpStatus addPersonInProject(@RequestParam String namePerson,
-                                    @RequestParam String titleProject){
-        boolean result = daoProject.addPersonInProject(namePerson, titleProject);
-        if(result){
-            return HttpStatus.CREATED;
-        }else {
-            return HttpStatus.BAD_GATEWAY;
+    @PostMapping("/update-add-person")
+    public ResponseEntity<?> updateAddPerson(@RequestParam String titleProject,
+                                             @RequestParam String namePerson) {
+        try {
+            projectService.updateAddPerson(titleProject, namePerson);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-    @PostMapping("/remove-person-in-project")
-    public HttpStatus removePersonInProject(@RequestParam String namePerson,
-                                         @RequestParam String titleProject){
-        boolean result = daoProject.removePersonInProject(namePerson, titleProject);
-        if(result){
-            return HttpStatus.CREATED;
-        }else {
-            return HttpStatus.BAD_GATEWAY;
+    @PostMapping("/update-remove-person")
+    public ResponseEntity<?> updateRemovePerson(@RequestParam String titleProject,
+                                                @RequestParam String namePerson) {
+        try {
+            projectService.updateRemovePerson(titleProject, namePerson);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-    @DeleteMapping("/delete")
-    public HttpStatus deleteProject(@RequestParam String titleProjectt){
-        boolean result = daoProject.deleteProject(titleProjectt);
-        if(result){
-            return HttpStatus.CREATED;
-        }else {
-            return HttpStatus.BAD_GATEWAY;
+    @DeleteMapping("/delete-by-title")
+    public ResponseEntity<?> deleteByTitle(String title) {
+        try {
+            projectService.deleteByTitle(title);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
         }
     }
 
-
-
-
-    @GetMapping("/all")
-    public List<ProjectD> getAllProject(){
-
-        return daoProject.getAllProject();
-
+    @DeleteMapping("/delete-by-id")
+    public ResponseEntity<?> deleteById(Long id) {
+        try {
+            projectService.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (ExceptionInfo e) {
+            return ResponseEntity.status(400).body(e);
+        }
     }
-
-
-    @PostConstruct
-    private void postConstruct(){
-        connection = dbManager.getConnection();
-    }
-
-
 
 
 }

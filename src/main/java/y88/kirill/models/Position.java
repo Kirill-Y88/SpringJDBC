@@ -11,7 +11,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "positions")
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -26,7 +25,7 @@ public class Position {
     private String title;
 
 
-    @OneToMany(mappedBy = "position")
+    @OneToMany(mappedBy = "position",fetch = FetchType.EAGER)
     private List<Person> persons;
 
 

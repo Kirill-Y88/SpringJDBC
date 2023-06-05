@@ -8,7 +8,6 @@ import java.util.List;
 
 @Entity
 @Table(name = "projects")
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,7 +21,7 @@ public class Project {
     @Column(name = "title")
     private String title;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "person_projects",
             joinColumns = @JoinColumn(name = "project_id"),

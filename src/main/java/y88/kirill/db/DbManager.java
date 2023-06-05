@@ -15,14 +15,6 @@ public class DbManager {
     private Connection connection;
 
 
-//
-//
-//    public DBManager(String jdbcUrl,String user, String password) {
-//        this.jdbcUrl = jdbcUrl;
-//        this.user = user;
-//        this.password = password;
-//    }
-
     public void init(String jdbcUrl,String user, String password){
         this.jdbcUrl = jdbcUrl;
         this.user = user;

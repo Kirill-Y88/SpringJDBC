@@ -8,10 +8,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "persons")
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,7 +29,7 @@ public class Person {
     @JoinColumn(name = "id_position")
     private Position position;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "person_projects",
             joinColumns = @JoinColumn(name = "person_id"),
@@ -37,5 +37,16 @@ public class Person {
     )
     private List<Project> projects;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return id.equals(person.id) && name.equals(person.name);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name);
+    }
 }
